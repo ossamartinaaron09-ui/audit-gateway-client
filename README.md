@@ -6,10 +6,12 @@ port 8402 using `GET /api/audit-contract?address=...`.
 ## Quick test
 
 ```sh
-python3 demo_audit_client.py --base-url http://127.0.0.1:8402
+python3 demo_audit_client.py --base-url https://territories-cooler-main-pills.trycloudflare.com
 ```
 
-Run this on the machine hosting the gateway. A working unpaid request returns
+This public HTTPS tunnel returned a validated quote from outside the VPS on
+26 October 2026. Its temporary hostname can change or become unavailable when
+the tunnel restarts. A working unpaid request returns
 HTTP 402 and exits with code **2**, showing the **0.50 USDC on Base** quote.
 No funds are sent. The client checks the quoted recipient, token, target and
 price ceiling before displaying payment details. Exit 1 indicates an error.
@@ -46,13 +48,16 @@ claim compatibility with standard x402 v2 authorization or facilitator flows.
 
 The gateway performs basic bytecode heuristics, including substring checks that
 can mistake PUSH data for opcodes. Its results are not a security audit or a
-guarantee of contract safety. The inspected payment handler does not bind a
-payment to the requesting customer and allows reusing a transaction hash.
+guarantee of contract safety. The current payment handler records used hashes,
+but does not bind a payment to the requesting customer; persistence failure
+handling and retries need further validation.
 This demo is for interface testing; production payment isolation and report
 accuracy need additional work before commercial reliance.
 
 The live unpaid 402 path is tested separately from mocked report responses.
 No paid end-to-end transaction has been performed for this demonstration.
+The report matcher supports both the current `contract` field and the earlier
+`address` field, and rejects conflicting target values.
 
 ## Local verification
 
